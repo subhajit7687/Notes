@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Add">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -14,8 +15,53 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp"
+        app:navigationIconTint="@color/theme_text_and_icon_accent"
         app:title="Add"
         app:titleTextColor="@color/theme_text_and_icon_accent"
-        app:navigationIconTint="@color/theme_text_and_icon_accent"/>
+        tools:layout_editor_absoluteX="1dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addPage_myToolbar"
+        app:layout_constraintVertical_bias="0.5"
+        tools:layout_editor_absoluteX="1dp">
+
+        <TextView
+            android:id="@+id/txt_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Date"
+            android:textColor="@color/theme_accent"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/edt_title"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:ems="10"
+            android:hint="Title"
+            android:inputType="text"
+            android:textColor="@color/theme_text_and_icon_accent" />
+
+        <EditText
+            android:id="@+id/edt_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:textColor="@color/theme_text_and_icon_accent" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

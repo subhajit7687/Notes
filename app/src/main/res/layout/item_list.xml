@@ -24,4 +24,12 @@
         android:layout_marginTop="5dp"
         android:text="TextView"
         android:textColor="@color/theme_text_and_icon_accent" />
+
+    <ImageView
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/delete"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>
