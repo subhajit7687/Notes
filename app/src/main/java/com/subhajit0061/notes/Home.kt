@@ -107,7 +107,7 @@ class Home : AppCompatActivity(), OnItemClick {
         intent.putExtra("title", title)
         intent.putExtra("body", body)
         intent.putExtra("position", position)
-        intent.putExtra("date",date)
+        intent.putExtra("date", date)
 
         startActivity(intent)
     }
