@@ -24,9 +24,11 @@ class Add : AppCompatActivity() {
     private lateinit var binding: ActivityAddBinding
     private var saveType = "new"
     private lateinit var dbHelper: DBHelper
-    private var editStatus = 0
+    private var saveStatus = 0
     private var id = 0
     private var position = 0
+    private var oldBody: String? = ""
+    private var oldTitle: String? = ""
 
     //On create
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,11 +41,6 @@ class Add : AppCompatActivity() {
         setSupportActionBar(binding.addPageMyToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        //Setting date and time to text view
-        val formatter = SimpleDateFormat.getDateTimeInstance()
-        val date = formatter.format(Date())
-        binding.txtDate.text = date
-
         //Checking the status of action through bundle
         val bundle = intent.extras
         if (bundle != null) {
@@ -51,18 +48,38 @@ class Add : AppCompatActivity() {
 
             id = bundle.getInt("id")
             position = bundle.getInt("position")
-            val title = bundle.getString("title")
-            val body = bundle.getString("body")
+            oldBody = bundle.getString("body")
+            oldTitle = bundle.getString("title")
+            val noteDate = bundle.getString("date")
 
-            binding.edtTitle.setText(title)
-            binding.edtBody.setText(body)
+            binding.txtDate.text = noteDate
+            binding.edtTitle.setText(oldTitle)
+            binding.edtBody.setText(oldBody)
+        } else {
+            //Setting date and time to text view
+            val formatter = SimpleDateFormat.getDateTimeInstance()
+            val date = formatter.format(Date())
+            binding.txtDate.text = date
         }
 
         //Action on back pressed
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (editStatus == 0) {
-                    Home.listUpdateType = ""
+                if (saveStatus == 0) {
+                    val body = binding.edtBody.text.toString()
+                    if (body.isBlank())
+                        Home.listUpdateType = ""
+                    else {
+                        if (saveType == "new")
+                            insertData()
+                        else {
+                            val title = binding.edtTitle.text.toString().trim()
+                            if (body != oldBody || oldTitle != title)
+                                updateData()
+                            else
+                                Home.listUpdateType = ""
+                        }
+                    }
                 }
                 finish()
             }
@@ -95,25 +112,31 @@ class Add : AppCompatActivity() {
 
         val title = binding.edtTitle.text.toString().trim()
         val body = binding.edtBody.text.toString()
-        val date = binding.txtDate.text.toString()
 
-        val values = ContentValues().apply {
-            put(COLUMN_TITLE, title)
-            put(COLUMN_BODY, body)
-            put(COLUMN_DATE, date)
-        }
+        val formatter = SimpleDateFormat.getDateTimeInstance()
+        val date = formatter.format(Date())
 
-        val res = db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(id.toString()))
-        if (res == -1)
-            Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
+        if (body.isBlank())
+            Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
         else {
-            Home.list[position].date = date
-            Home.list[position].tile = title
+            val values = ContentValues().apply {
+                put(COLUMN_TITLE, title)
+                put(COLUMN_BODY, body)
+                put(COLUMN_DATE, date)
+            }
 
-            Home.listUpdateType = "update"
-            editStatus = 1
-            Toast.makeText(this, "Updated successfully!", Toast.LENGTH_SHORT).show()
-            onBackPressedDispatcher.onBackPressed()
+            val res = db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(id.toString()))
+            if (res == -1)
+                Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
+            else {
+                Home.list[position].date = date
+                Home.list[position].tile = title
+
+                Home.listUpdateType = "update"
+                saveStatus = 1
+                Toast.makeText(this, "Updated successfully!", Toast.LENGTH_SHORT).show()
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
@@ -124,30 +147,34 @@ class Add : AppCompatActivity() {
         val body = binding.edtBody.text.toString()
         val date = binding.txtDate.text.toString()
 
-        val values = ContentValues().apply {
-            put(COLUMN_DATE, date)
-            put(COLUMN_TITLE, title)
-            put(COLUMN_BODY, body)
-        }
-        val res = db.insert(TABLE_NAME, null, values)
-        if (res == -1L)
-            Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
+        if (body.isBlank())
+            Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
         else {
-            val cursor = db.rawQuery(
-                "SELECT $COLUMN_ID FROM $TABLE_NAME WHERE $COLUMN_DATE = ? AND $COLUMN_TITLE = ? AND $COLUMN_BODY = ?",
-                arrayOf(date, title, body)
-            )
-            cursor.moveToLast()
-            val id = cursor.getInt(0)
-            cursor.close()
-            db.close()
+            val values = ContentValues().apply {
+                put(COLUMN_DATE, date)
+                put(COLUMN_TITLE, title)
+                put(COLUMN_BODY, body)
+            }
+            val res = db.insert(TABLE_NAME, null, values)
+            if (res == -1L)
+                Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
+            else {
+                val cursor = db.rawQuery(
+                    "SELECT $COLUMN_ID FROM $TABLE_NAME WHERE $COLUMN_DATE = ? AND $COLUMN_TITLE = ? AND $COLUMN_BODY = ?",
+                    arrayOf(date, title, body)
+                )
+                cursor.moveToLast()
+                val id = cursor.getInt(0)
+                cursor.close()
+                db.close()
 
-            Home.list.add(NotesDetails(id, title, date))
+                Home.list.add(NotesDetails(id, title, date))
 
-            editStatus = 1
-            Home.listUpdateType = "new"
-            Toast.makeText(this, "Added successfully!", Toast.LENGTH_SHORT).show()
-            onBackPressedDispatcher.onBackPressed()
+                saveStatus = 1
+                Home.listUpdateType = "new"
+                Toast.makeText(this, "Added successfully!", Toast.LENGTH_SHORT).show()
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 }

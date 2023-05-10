@@ -89,6 +89,7 @@ class Home : AppCompatActivity(), OnItemClick {
         val db = dbHelper.readableDatabase
         val id = list[position].id
         val title = list[position].tile
+        val date = list[position].date
 
         val cursor = db.rawQuery(
             "SELECT $COLUMN_BODY FROM $TABLE_NAME WHERE $COLUMN_ID = ?",
@@ -105,6 +106,7 @@ class Home : AppCompatActivity(), OnItemClick {
         intent.putExtra("title", title)
         intent.putExtra("body", body)
         intent.putExtra("position", position)
+        intent.putExtra("date",date)
 
         startActivity(intent)
     }
