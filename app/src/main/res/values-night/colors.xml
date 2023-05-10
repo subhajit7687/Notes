@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="theme_accent">#CACACB</color>
-    <color name="theme_text_and_icon_accent">#636363</color>
-    <color name="button_ripple">#4DFFFFFF</color>
+    <color name="white">#000000</color>
+    <color name="theme_accent">#313131</color>
+    <color name="theme_text_and_icon_accent">#838282</color>
+    <color name="button_ripple">#4D8C8C8C</color>
+    <color name="item_box_ripple">#4DCACACB</color>
 </resources>

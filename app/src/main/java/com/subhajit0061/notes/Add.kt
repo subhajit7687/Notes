@@ -117,7 +117,7 @@ class Add : AppCompatActivity() {
         val date = formatter.format(Date())
 
         if (body.isBlank())
-            Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
         else {
             val values = ContentValues().apply {
                 put(COLUMN_TITLE, title)
@@ -148,7 +148,7 @@ class Add : AppCompatActivity() {
         val date = binding.txtDate.text.toString()
 
         if (body.isBlank())
-            Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
         else {
             val values = ContentValues().apply {
                 put(COLUMN_DATE, date)

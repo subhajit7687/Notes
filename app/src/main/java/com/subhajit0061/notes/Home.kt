@@ -35,6 +35,7 @@ class Home : AppCompatActivity(), OnItemClick {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        list.clear()
 
         //initializing
         dbHelper = DBHelper(this)

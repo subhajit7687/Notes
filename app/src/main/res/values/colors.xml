@@ -5,4 +5,5 @@
     <color name="theme_accent">#CACACB</color>
     <color name="theme_text_and_icon_accent">#636363</color>
     <color name="button_ripple">#4DFFFFFF</color>
+    <color name="item_box_ripple">#80CACACB</color>
 </resources>

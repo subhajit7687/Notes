@@ -46,12 +46,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/white"
+            android:textColorHint="@color/theme_accent"
             android:ems="10"
             android:hint="Title"
             android:inputType="text"
             android:textColor="@color/theme_text_and_icon_accent" />
 
         <EditText
+            android:textColorHint="@color/theme_accent"
             android:id="@+id/edt_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
