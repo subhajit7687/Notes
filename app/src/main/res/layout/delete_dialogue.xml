@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/theme_accent"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete!"
+        android:textColor="@color/theme_text_and_icon_accent" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="15dp"
+        android:text="Are you sure want to delete?"
+        android:textColor="@color/theme_text_and_icon_accent"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/btn_yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/message"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="15dp"
+        android:text="Yes"
+        android:textColor="@color/theme_text_and_icon_accent"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/btn_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/message"
+        android:layout_marginTop="10dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="15dp"
+        android:text="No"
+        android:textColor="@color/theme_text_and_icon_accent"
+        android:textSize="16sp" />
+
+</RelativeLayout>

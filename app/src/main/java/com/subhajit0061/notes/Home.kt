@@ -1,9 +1,13 @@
 package com.subhajit0061.notes
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager.LayoutParams
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.subhajit0061.notes.databinding.ActivityHomeBinding
 import com.subhajit0061.notes.functions.DBHelper
@@ -78,10 +82,13 @@ class Home : AppCompatActivity(), OnItemClick {
             listIsEmpty = false
             binding.txtNoNotes.visibility = View.GONE
         }
-        if (listUpdateType == "new")
+        if (listUpdateType == "new") {
             adapter.notifyItemInserted(list.size - 1)
-        else if (listUpdateType == "update")
+            listUpdateType = ""
+        } else if (listUpdateType == "update") {
             adapter.notifyItemChanged(updatePosition)
+            listUpdateType = ""
+        }
     }
 
     //Action when clicked on list items
@@ -114,17 +121,34 @@ class Home : AppCompatActivity(), OnItemClick {
 
     //Action when clicked on list delete icon
     override fun onDeleteClick(position: Int) {
-        val db = dbHelper.writableDatabase
-        val id = list[position].id
 
-        val res = db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
-        if (res != -1) {
-            list.removeAt(position)
-            adapter.notifyItemRemoved(position)
-            if (list.size == 0) {
-                listIsEmpty = true
-                binding.txtNoNotes.visibility = View.VISIBLE
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.delete_dialogue)
+        val btn_yes = dialog.findViewById<TextView>(R.id.btn_yes)
+        val btn_no = dialog.findViewById<TextView>(R.id.btn_no)
+        dialog.window?.setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT)
+        dialog.show()
+
+        btn_yes.setOnClickListener {
+
+            val db = dbHelper.writableDatabase
+            val id = list[position].id
+
+            val res = db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
+            if (res != -1) {
+                list.removeAt(position)
+                adapter.notifyItemRemoved(position)
+                Toast.makeText(this,"Deleted Successfully!",Toast.LENGTH_SHORT).show()
+                if (list.size == 0) {
+                    listIsEmpty = true
+                    binding.txtNoNotes.visibility = View.VISIBLE
+                }
             }
+            dialog.dismiss()
+        }
+
+        btn_no.setOnClickListener {
+            dialog.dismiss()
         }
     }
 }

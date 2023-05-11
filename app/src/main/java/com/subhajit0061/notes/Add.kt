@@ -67,17 +67,11 @@ class Add : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 if (saveStatus == 0) {
                     val body = binding.edtBody.text.toString()
-                    if (body.isBlank())
-                        Home.listUpdateType = ""
-                    else {
-                        if (saveType == "new")
-                            insertData()
+                    if (body.isNotBlank()) {
+                        if (saveType == "new") insertData()
                         else {
                             val title = binding.edtTitle.text.toString().trim()
-                            if (body != oldBody || oldTitle != title)
-                                updateData()
-                            else
-                                Home.listUpdateType = ""
+                            if (body != oldBody || oldTitle != title) updateData()
                         }
                     }
                 }
@@ -97,10 +91,8 @@ class Add : AppCompatActivity() {
         when (item.itemId) {
             android.R.id.home -> onBackPressedDispatcher.onBackPressed()
             else -> {
-                if (saveType == "new")
-                    insertData()
-                else
-                    updateData()
+                if (saveType == "new") insertData()
+                else updateData()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -116,8 +108,7 @@ class Add : AppCompatActivity() {
         val formatter = SimpleDateFormat.getDateTimeInstance()
         val date = formatter.format(Date())
 
-        if (body.isBlank())
-            Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
+        if (body.isBlank()) Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
         else {
             val values = ContentValues().apply {
                 put(COLUMN_TITLE, title)
@@ -126,8 +117,7 @@ class Add : AppCompatActivity() {
             }
 
             val res = db.update(TABLE_NAME, values, "$COLUMN_ID = ?", arrayOf(id.toString()))
-            if (res == -1)
-                Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
+            if (res == -1) Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
             else {
                 Home.list[position].date = date
                 Home.list[position].tile = title
@@ -147,8 +137,7 @@ class Add : AppCompatActivity() {
         val body = binding.edtBody.text.toString()
         val date = binding.txtDate.text.toString()
 
-        if (body.isBlank())
-            Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
+        if (body.isBlank()) Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
         else {
             val values = ContentValues().apply {
                 put(COLUMN_DATE, date)
@@ -156,8 +145,7 @@ class Add : AppCompatActivity() {
                 put(COLUMN_BODY, body)
             }
             val res = db.insert(TABLE_NAME, null, values)
-            if (res == -1L)
-                Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
+            if (res == -1L) Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show()
             else {
                 val cursor = db.rawQuery(
                     "SELECT $COLUMN_ID FROM $TABLE_NAME WHERE $COLUMN_DATE = ? AND $COLUMN_TITLE = ? AND $COLUMN_BODY = ?",
